@@ -1,0 +1,151 @@
+<%- include('partials/header') -%>
+<div class="center"><h5> <strong> <%= user.userName %> Double click on map and submit to let people know you are leaving a spot</strong></h5></div>
+<div class="container">
+ <!-- FIXED ACTION BUTTON -->
+ <div class="fixed-action-btn">
+  <a href="#" class="btn-floating red btn-large"><i class="large material-icons">mode_edit</i></a>
+  <ul>
+    <li><p class="right col s6 push-s1">
+      <a href="/logout" class="btn-floating btn-large waves-effect waves-light red "> 
+       EXIT </a></p></li>
+    <li hidden><a href="#" class="btn-floating blue 
+      btn-large">example</a></li>
+   <li> <form id=theFormId
+    method="POST" 
+          class="col-1"
+         >
+          <button class="btn-floating yellow darken-4 btn-large" type="submit">submit</button>
+        </form>
+      </li>
+  </ul>
+</div>
+      <!-- map -->
+  <div id="issMap"></div>
+  <div class="row mt-5">
+
+          <script>
+        //first part of adding markers to group
+        var nyc = L.marker([40.7279101090076, -73.9925114575458]).bindPopup('nyc');
+        var marky = L.layerGroup([nyc]);
+        
+        var a= 0;
+        var b= 0;
+        // Making a map and tiles
+
+      // can be changed by state
+        const mymap = L.map('issMap', {
+          'center': [40.7279101090076, -73.9925114575458],
+          'zoom': 14,
+                
+      });
+      //
+      //replace with NYC map
+        const attribution =
+          '&copy; <a href="https://maps{s}.nyc.gov/xyz/1.0.0/carto/basemap/{z}/{x}/{y}.jpg">OpenStreetMap</a> contributors';
+  
+        const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const tiles = L.tileLayer(tileUrl, { attribution });
+        tiles.addTo(mymap);
+        //second part of adding markers to layer
+        mymap.layers=[mymap,marky]
+        // Making a marker with a custom icon
+        var greenIcon = L.icon({
+          iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+          shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+      
+          iconSize:     [38, 40], // size of the icon
+          shadowSize:   [50, 30], // size of the shadow
+          iconAnchor:   [22, 41], // point of the icon which will correspond to marker's location
+          shadowAnchor: [4, 31],  // the same for the shadow
+          popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+      });
+     
+      //Leaflet another Draw Event
+      var marker;
+      mymap.on('dblclick', function(event){
+             
+             document.getElementById("latitude").innerHTML = event.latlng.lat;
+             document.getElementById("longitude").innerHTML = event.latlng.lng;
+
+             document.getElementById('theFormId').setAttribute('action', `/coordinate/location/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
+
+             //only allows one marker wahoo-it works
+             if (mymap.hasLayer(marker)) {
+              mymap.removeLayer(marker); // remove
+          }
+ //tag username to marker
+const Uname = document.getElementById("userName")
+//adding marker
+       marker= L.marker([event.latlng.lat, event.latlng.lng], {icon: greenIcon,
+        
+          draggable: false,
+          autoPan: true,
+               
+        }).bindTooltip(Uname,
+        {
+            permanent: true,
+            direction: 'right'
+            
+        }).addTo(mymap).on('click', function(e) {
+          alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
+          document.getElementById("latitude").innerHTML = e.latlng.lat;
+         })   
+         
+          ;})
+          
+          
+      </script> 
+     
+
+    </div class="left"><br>
+    <div>latitude: <span id="latitude"></span></div><br>
+    <div>longitude: <span id="longitude"></span></div>
+<div></div>
+
+<div ><span id="rlink"></span></div>
+
+
+    <section class="right row">
+        <div class="col s20 push-s1000">
+            <p hidden><span id="userName">User Name: <%= user.userName %></span></p>
+            
+            <script>
+              const myElement = document.getElementById("");
+              
+            </script>
+           
+
+            <% comment.forEach(el =>{%>
+              <li class="col-6 justify-content-between mt-5" data-id='<%=el._id%>'>
+                <%=el.comment%>  <%= user.userName %>  <%=el.createdAt%> 
+      
+             
+              </li>
+              <%})%>
+
+
+
+
+
+
+
+            <script>
+            
+              L.control.locate(
+                {
+                  flyTo: true,
+                  strings: {title: "Zoom to current location"},
+                  icon: "fa fa-map-pin",
+                  locateOptions: {maxZoom: 16}
+                }
+              ).addTo(mymap);
+
+              console.log(mymap.getBounds());
+              </script>
+   
+      </div>  
+    </div>
+  </div>
+
+</div>
+<%- include('partials/footer') -%>
