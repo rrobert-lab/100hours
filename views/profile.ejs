@@ -13,8 +13,7 @@
    <li> <form id=theFormId
     method="POST" 
           class="col-1"
-         >
-          <button class="btn-floating yellow darken-4 btn-large" type="submit">submit</button>
+         ><button class="btn-floating yellow darken-4 btn-large" type="submit">submit</button>
         </form>
       </li>
   </ul>
@@ -67,7 +66,7 @@
              document.getElementById("latitude").innerHTML = event.latlng.lat;
              document.getElementById("longitude").innerHTML = event.latlng.lng;
 
-             document.getElementById('theFormId').setAttribute('action', `/coordinate/location/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
+             document.getElementById('theFormId').setAttribute('action', `/coordinate/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
 
              //only allows one marker wahoo-it works
              if (mymap.hasLayer(marker)) {
@@ -113,20 +112,7 @@ const Uname = document.getElementById("userName")
               const myElement = document.getElementById("");
               
             </script>
-           
-
-            <% comment.forEach(el =>{%>
-              <li class="col-6 justify-content-between mt-5" data-id='<%=el._id%>'>
-                <%=el.comment%>  <%= user.userName %>  <%=el.createdAt%> 
-      
-             
-              </li>
-              <%})%>
-
-
-
-
-
+            
 
 
             <script>
@@ -141,11 +127,17 @@ const Uname = document.getElementById("userName")
               ).addTo(mymap);
 
               console.log(mymap.getBounds());
+              
               </script>
-   
-      </div>  
+ 
+
+ <% area.forEach(el =>{%>
+  <li class="col-6 justify-content-between mt-5" data-id='<%=el._id%>'>
+    <%=el.comment%>  <%= user.userName %>  <%=el.createdAt%> 
+  </li>
+  <%})%>
     </div>
   </div>
-
+   
 </div>
 <%- include('partials/footer') -%>
