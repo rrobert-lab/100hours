@@ -1,5 +1,5 @@
 <%- include('partials/header') -%>
-<div class="center"><h5> <strong> <%= user.userName %> Double click on map and submit to let people know you are leaving a spot</strong></h5></div>
+<div class="center"><h5> <strong> <%= userName %> Double click on map and submit to let people know you are leaving a spot</strong></h5></div>
 <div class="container">
  <!-- FIXED ACTION BUTTON -->
  <div class="fixed-action-btn">
@@ -13,7 +13,7 @@
    <li> <form id=theFormId
     method="POST" 
           class="col-1"
-         ><button class="btn-floating yellow darken-4 btn-large" type="submit">submit</button>
+         ><button class="btn-floating yellow darken-4 btn-large" onclick="myFunction()" type="submit">submit</button>
         </form>
       </li>
   </ul>
@@ -24,6 +24,10 @@
 
           <script>
         //first part of adding markers to group
+        function myFunction() {
+  alert("Submitted!");
+}
+        
         var nyc = L.marker([40.7279101090076, -73.9925114575458]).bindPopup('nyc');
         var marky = L.layerGroup([nyc]);
         
@@ -50,6 +54,16 @@
         // Making a marker with a custom icon
         var greenIcon = L.icon({
           iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+          shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+      
+          iconSize:     [38, 40], // size of the icon
+          shadowSize:   [50, 30], // size of the shadow
+          iconAnchor:   [22, 41], // point of the icon which will correspond to marker's location
+          shadowAnchor: [4, 31],  // the same for the shadow
+          popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+      });
+      var redIcon = L.icon({
+          iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
           shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
       
           iconSize:     [38, 40], // size of the icon
@@ -106,7 +120,7 @@ const Uname = document.getElementById("userName")
 
     <section class="right row">
         <div class="col s20 push-s1000">
-            <p hidden><span id="userName">User Name: <%= user.userName %></span></p>
+            <p hidden><span id="userName">User Name: <%= userName %></span></p>
             
             <script>
               const myElement = document.getElementById("");
@@ -126,18 +140,42 @@ const Uname = document.getElementById("userName")
                 }
               ).addTo(mymap);
 
-              console.log(mymap.getBounds());
+             
               
               </script>
- 
+ <ul>
 
- <% for(var i=0; i<larea.length; i++) {%>
-  <li class="col-6 justify-content-between mt-5">
-    <a href="#">
+  
+  <% larea.forEach(el =>{%>
+
+    <li class="col-6 justify-content-between mt-5" data-id='<%=el._id%>'>
       
-    </a>
-  </li>
-<% } %>
+       <script>
+        
+        var lad= <%= el.lad %>
+          var lon= <%= el.lon %>
+          var userName= "<%= el.userName %>"
+        marker = L.marker([ lon,lad], {
+        icon: redIcon 
+       
+     })
+     .addTo(mymap)
+     .openPopup()
+     .bindTooltip(userName,
+        {
+            permanent: true,
+            direction: 'right'
+          
+        })   
+     
+     ; 
+
+          console.log(userName)
+        </script>
+      </li>
+    <%})%>
+  </ul>
+  
     </div>
   </div>
    

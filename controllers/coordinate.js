@@ -1,11 +1,13 @@
 
 const Coordinate = require("../models/Coordinate");
 module.exports = {
-
+ 
   getData: async (req, res) => {
     try {
+      
       const larea = await Coordinate.find({}).sort({ createdAt: "desc" }).lean();
-      res.render("profile.ejs", { larea: larea });
+      console.log(req.user.userName)
+      res.render("profile.ejs", { larea: larea, userName:req.user.userName, userEmail:req.user.email });
     } catch (err) {
       console.log(err);
     }
