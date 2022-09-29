@@ -131,11 +131,13 @@ const Uname = document.getElementById("userName")
               </script>
  
 
- <% area.forEach(el =>{%>
-  <li class="col-6 justify-content-between mt-5" data-id='<%=el._id%>'>
-    <%=el.comment%>  <%= user.userName %>  <%=el.createdAt%> 
+ <% for(var i=0; i<larea.length; i++) {%>
+  <li class="col-6 justify-content-between mt-5">
+    <a href="#">
+      
+    </a>
   </li>
-  <%})%>
+<% } %>
     </div>
   </div>
    

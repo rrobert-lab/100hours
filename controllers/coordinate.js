@@ -1,13 +1,11 @@
-const cloudinary = require("../middleware/cloudinary");
-const Post = require("../models/Post");
-const Comment = require("../models/Comment");
+
 const Coordinate = require("../models/Coordinate");
 module.exports = {
 
   getData: async (req, res) => {
     try {
-      const area = await Coordinate.find().sort({ createdAt: "desc" }).lean();
-      res.render("profile.ejs", { area: area });
+      const larea = await Coordinate.find({}).sort({ createdAt: "desc" }).lean();
+      res.render("profile.ejs", { larea: larea });
     } catch (err) {
       console.log(err);
     }
