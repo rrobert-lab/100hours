@@ -1,5 +1,4 @@
 <%- include('partials/header') -%>
-<div class="center"><h5> <strong> <%= userName %> Double click on map and submit to let people know you are leaving a spot</strong></h5></div>
 <div class="container">
  <!-- FIXED ACTION BUTTON -->
  <div class="fixed-action-btn">
@@ -18,6 +17,34 @@
       </li>
   </ul>
 </div>
+
+<!-- Switch -->
+<div class="switch center">
+  <label> <span class="flow-text leaving">
+    leaving spot</span>
+    <input type="checkbox" name="statusValue" onclick="switchFunction()"  >
+    <span class="lever"></span>
+    <span class="flow-text finding">
+     finding spot</span>
+  </label>
+</div>
+
+      
+
+<script>
+  
+function switchFunction(){
+ //a==null||a==true?a=false:a=false;
+ const a =document.getElementsByClassName('flow-text').checked
+ console.log(a)
+    }
+
+
+
+
+
+</script>
+
       <!-- map -->
   <div id="issMap"></div>
   <div class="row mt-5">
@@ -27,7 +54,7 @@
         function myFunction() {
   alert("Submitted!");
 }
-        
+       
         var nyc = L.marker([40.7279101090076, -73.9925114575458]).bindPopup('nyc');
         var marky = L.layerGroup([nyc]);
         
@@ -75,20 +102,24 @@
      
       //Leaflet another Draw Event
       var marker;
-      mymap.on('dblclick', function(event){
-             
+
+  
+  mymap.on('dblclick', function(event){
+             if(markerOnMap()){
              document.getElementById("latitude").innerHTML = event.latlng.lat;
              document.getElementById("longitude").innerHTML = event.latlng.lng;
-
+            //  window.open("https://www.waze.com/ul?ll=40.75889500%2C-73.98513100&navigate=yes&zoom=17");
              document.getElementById('theFormId').setAttribute('action', `/coordinate/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
 
              //only allows one marker wahoo-it works
              if (mymap.hasLayer(marker)) {
               mymap.removeLayer(marker); // remove
+            }
           }
+  
  //tag username to marker
 const Uname = document.getElementById("userName")
-//adding marker
+//adding marker from everyone
        marker= L.marker([event.latlng.lat, event.latlng.lng], {icon: greenIcon,
         
           draggable: false,
@@ -105,14 +136,13 @@ const Uname = document.getElementById("userName")
          })   
          
           ;})
-          
-          
       </script> 
      
 
     </div class="left"><br>
     <div>latitude: <span id="latitude"></span></div><br>
     <div>longitude: <span id="longitude"></span></div>
+    <div>address: <span id="longitude"></span></div>
 <div></div>
 
 <div ><span id="rlink"></span></div>
@@ -124,13 +154,7 @@ const Uname = document.getElementById("userName")
             
             <script>
               const myElement = document.getElementById("");
-              
-            </script>
-            
-
-
-            <script>
-            
+                      
               L.control.locate(
                 {
                   flyTo: true,
@@ -168,9 +192,6 @@ const Uname = document.getElementById("userName")
           
         })   
      
-     ; 
-
-          console.log(userName)
         </script>
       </li>
     <%})%>
