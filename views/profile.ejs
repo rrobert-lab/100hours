@@ -9,44 +9,23 @@
        EXIT </a></p></li>
     <li hidden><a href="#" class="btn-floating blue 
       btn-large">example</a></li>
-   <li> <form id=theFormId
-    method="POST" 
-          class="col-1"
-         ><button class="btn-floating yellow darken-4 btn-large" onclick="myFunction()" type="submit">submit</button>
-        </form>
-      </li>
-  </ul>
+    </ul>
 </div>
 
 <!-- Switch -->
 <div class="switch center">
   <label> <span class="flow-text leaving">
     leaving spot</span>
-    <input type="checkbox" name="statusValue" onclick="switchFunction()"  >
+    <input type="checkbox" name="statusValue" id="statusValue" onclick="switchFunction()"  >
     <span class="lever"></span>
     <span class="flow-text finding">
      finding spot</span>
   </label>
 </div>
 
-      
-
-<script>
-  
-function switchFunction(){
- //a==null||a==true?a=false:a=false;
- const a =document.getElementsByClassName('flow-text').checked
- console.log(a)
-    }
-
-
-
-
-
-</script>
-
       <!-- map -->
   <div id="issMap"></div>
+  <section id="laddress">Address: <section id="address"></section></section>
   <div class="row mt-5">
 
           <script>
@@ -55,14 +34,7 @@ function switchFunction(){
   alert("Submitted!");
 }
        
-        var nyc = L.marker([40.7279101090076, -73.9925114575458]).bindPopup('nyc');
-        var marky = L.layerGroup([nyc]);
-        
-        var a= 0;
-        var b= 0;
-        // Making a map and tiles
 
-      // can be changed by state
         const mymap = L.map('issMap', {
           'center': [40.7279101090076, -73.9925114575458],
           'zoom': 14,
@@ -77,7 +49,7 @@ function switchFunction(){
         const tiles = L.tileLayer(tileUrl, { attribution });
         tiles.addTo(mymap);
         //second part of adding markers to layer
-        mymap.layers=[mymap,marky]
+        //mymap.layers=[mymap,marky]
         // Making a marker with a custom icon
         var greenIcon = L.icon({
           iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
@@ -102,57 +74,54 @@ function switchFunction(){
      
       //Leaflet another Draw Event
       var marker;
-
-  
-  mymap.on('dblclick', function(event){
-             if(markerOnMap()){
-             document.getElementById("latitude").innerHTML = event.latlng.lat;
+//add leaving spot marker
+var clicks = 0; // counter 
+  mymap.on('click', function(event){
+            console.log(clicks++)//only one marker per user delete last marker using counter
+            document.getElementById("latitude").innerHTML = event.latlng.lat;
              document.getElementById("longitude").innerHTML = event.latlng.lng;
             //  window.open("https://www.waze.com/ul?ll=40.75889500%2C-73.98513100&navigate=yes&zoom=17");
              document.getElementById('theFormId').setAttribute('action', `/coordinate/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
+           
 
-             //only allows one marker wahoo-it works
-             if (mymap.hasLayer(marker)) {
-              mymap.removeLayer(marker); // remove
-            }
-          }
-  
- //tag username to marker
-const Uname = document.getElementById("userName")
-//adding marker from everyone
-       marker= L.marker([event.latlng.lat, event.latlng.lng], {icon: greenIcon,
-        
-          draggable: false,
-          autoPan: true,
-               
-        }).bindTooltip(Uname,
-        {
-            permanent: true,
-            direction: 'right'
-            
-        }).addTo(mymap).on('click', function(e) {
-          alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-          document.getElementById("latitude").innerHTML = e.latlng.lat;
-         })   
-         
-          ;})
-      </script> 
-     
+            if (clicks>1) {
+              mymap.removeLayer(marker); // remove extra marker when leavin spot
+              }       //tag username to marker
+            const Uname = document.getElementById("userName")
+            if(switchFunction()==false){
+            marker= L.marker([event.latlng.lat, event.latlng.lng], 
+            {icon: greenIcon,
+              draggable: false,
+              autoPan: true,
+                  
+            }).bindTooltip(Uname,
+            {
+                permanent: true,
+                direction: 'right'
+                
+            }).addTo(mymap).on('click', function(e) {
+              //alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
+              document.getElementById("latitude").innerHTML = e.latlng.lat;
+              
+            });}})
+</script>
+  <!-- end of leaving spot marker  -->
+   <!-- switch for leaving and finding spot     -->
+      <div class="right"> <form id=theFormId 
+        method="POST" 
+              class="col-1"
+             ><button id="theFormIda" class="btn-floating yellow darken-4 btn-large" onclick="myFunction()" type="submit">submit</button>
+            </form>
+          </div>
 
     </div class="left"><br>
-    <div>latitude: <span id="latitude"></span></div><br>
+    <div >latitude: <span id="latitude"></span></div><br>
     <div>longitude: <span id="longitude"></span></div>
-    <div>address: <span id="longitude"></span></div>
-<div></div>
-
-<div ><span id="rlink"></span></div>
-
-
     <section class="right row">
         <div class="col s20 push-s1000">
             <p hidden><span id="userName">User Name: <%= userName %></span></p>
             
-            <script>
+  <script>
               const myElement = document.getElementById("");
                       
               L.control.locate(
@@ -163,22 +132,21 @@ const Uname = document.getElementById("userName")
                   locateOptions: {maxZoom: 16}
                 }
               ).addTo(mymap);
+</script>
+<!-- draw  all flags -->
 
-             
-              
-              </script>
- <ul>
-
-  
+ 
+ 
+    <ul>
   <% larea.forEach(el =>{%>
 
-    <li class="col-6 justify-content-between mt-5" data-id='<%=el._id%>'>
+    <li class="col-6 justify-content-between mt-5 " data-id='<%=el._id%>'>
       
        <script>
-        
+ 
         var lad= <%= el.lad %>
-          var lon= <%= el.lon %>
-          var userName= "<%= el.userName %>"
+        var lon= <%= el.lon %>
+        var userName= "<%= el.userName %>"
         marker = L.marker([ lon,lad], {
         icon: redIcon 
        
@@ -190,15 +158,48 @@ const Uname = document.getElementById("userName")
             permanent: true,
             direction: 'right'
           
-        })   
-     
+        })
+        .addTo(mymap).on('click', function(el){  $.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${el.lon}&lon=${el.lad}`, 
+        
+        function(data){console.log(data.address.house_number, data.address.road, data.address.city);
+         
+          document.getElementById("address").innerHTML = data.address.house_number+" "+ data.address.road+" "+data.address.city});})
+         
         </script>
       </li>
     <%})%>
   </ul>
+    
   
+  <script>
+  //switch graying out or hidding submit button
+      function switchFunction(){
+      //checkbox value
+      var isChecked = document.getElementById('statusValue').checked; 
+      
+      const element = document.getElementById("theFormIda");
+      if(document.getElementById('statusValue').checked==true){              
+                    element.classList.add("disabled");
+                  console.log('a')}
+        else{element.classList.remove("disabled");
+        console.log('c');
+        
+        
+        
+      }
+    
+    
+    return isChecked;}
+    
+    
+    
+    
+    
+    </script>
     </div>
   </div>
    
 </div>
+
+
 <%- include('partials/footer') -%>

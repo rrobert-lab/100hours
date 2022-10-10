@@ -24,7 +24,9 @@
 # Things I will add
 `street address, right now it works on longitude and latitude`
 `time limit on which a street parking is available`
+`I can incorporate  time expiration of db but then I will not have data`
+https://www.mongodb.com/docs/manual/core/timeseries/timeseries-automatic-removal/
 `ability to delete a marker if you take or will be taking a parking`
-`separate page for available parking spots`
+
 
 
