@@ -15,7 +15,7 @@ module.exports = {
   deleteCoordinate: async (req, res) => {
     try {
       // Find post by id
-      await Coordinate.findOneAndDelete({ "user": ObjectId(req.params.id) });
+      await Coordinate.findOneAndDelete({ user:req.params.id });
       console.log('did')
       // Delete post from db
       
