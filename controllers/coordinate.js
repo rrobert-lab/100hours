@@ -12,6 +12,22 @@ module.exports = {
       console.log(err);
     }
   }, 
+  deleteCoordinate: async (req, res) => {
+    try {
+      // Find post by id
+      await Coordinate.findOneAndDelete({ "user": ObjectId(req.params.id) });
+      console.log('did')
+      // Delete post from db
+      
+      console.log("Deleted Post");
+      res.redirect("/profile");
+    } catch (err) {
+      res.redirect("/profile");
+      console.log(req.params.id)
+     
+
+    }
+  },
 
   coordinate: async (req, res) => {
       try {

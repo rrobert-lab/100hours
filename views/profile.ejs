@@ -26,14 +26,24 @@
       <!-- map -->
   <div id="issMap"></div>
   <section id="laddress">Address: <section id="address"></section></section>
-  <div id="takeParking" hidden><button  class="clear right waves-effect waves-light btn red" onclick='useWaze()'type="submit">Take Parking</button></div>
+  </br>User: <section id="user"></section>
+  </br>UserID: <section id="userID"></section>
+  
+  <div id="takeParking" hidden> 
+    <div></div>
+    <form   action=''  method="POST" id="deleteB"> 
+    <button  class="clear right waves-effect waves-light btn red" onclick='useWaze()'type="submit">
+      Take Parking</button>
+    </form>
+    </div>
+  
+  
   <script>
   function useWaze(){
 
     var lat =document.getElementById("latitude").innerHTML ;
     var lng= document.getElementById("longitude").innerHTML ;
-    // https://www.waze.com/ul?ll=40.75889500%2C-73.98513100&navigate=yes&zoom=17
-    //window.open("https://www.waze.com/ul?ll=40.75889500%2C-73.98513100&navigate=yes&zoom=17")
+    
     window.open(`https://www.waze.com/ul?ll=${lat}%2C${lng}&navigate=yes&zoom=17`);
 
   }
@@ -78,6 +88,7 @@ var clicks = 0; // counter
             clicks++;//only one marker per user delete last marker using counter
             document.getElementById("latitude").innerHTML = event.latlng.lat;
              document.getElementById("longitude").innerHTML = event.latlng.lng;
+             document.getElementById("user").innerHTML =(Object.values(e.target["options"])[0])
              
             
              document.getElementById('theFormId').setAttribute('action', `/coordinate/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
@@ -115,6 +126,7 @@ fetch(api)
       document.getElementById("latitude").innerHTML = lat;
      document.getElementById("longitude").innerHTML = lng;   
      document.getElementById("address").innerHTML = j.display_name;   
+     
 })
 });
             
@@ -133,7 +145,7 @@ fetch(api)
     <div hidden>longitude: <span id="longitude"></span></div>
     <section class="right row">
         <div class="col s20 push-s1000">
-            <p hidden><span id="userName">User Name: <%= userName %></span></p>
+            <p><span id="userName" >User Name: user</span></p>
             
   <script>
               const myElement = document.getElementById("");
@@ -163,23 +175,38 @@ fetch(api)
         var lad= <%= el.lad %>
         var lon= <%= el.lon %>
         var userName= `<%= el.userName %>`
-        marker = L.marker([ lon,lad,userName])
+        var user=`<%= el.user %>`
+        marker = L.marker([ lon,lad,userName],{userName,user
+
+        })
        
            .bindPopup(userName);
 
         marker.on('click', function(e) {
+          document.getElementById("user").innerHTML =(Object.values(e.target["options"])[0])//username
+          document.getElementById("userID").innerHTML =(Object.values(e.target["options"])[1])//userID
   const { lat, lng } = e.target.getLatLng();
-
+  
+ 
+//console.log((Object.values(e.target["options"])[1]));
   const api = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
-
+ 
 fetch(api)
     .then(response => response.json())
     .then(j => {
      
       console.log(j.display_name)
       document.getElementById("latitude").innerHTML = lat;
-     document.getElementById("longitude").innerHTML = lng;   
-     document.getElementById("address").innerHTML = j.display_name;   
+     document.getElementById("longitude").innerHTML = lng; 
+     document.getElementById("userName").innerHTML = (Object.values(e.target["options"])[1]);  
+    
+    
+     document.getElementById("address").innerHTML = j.display_name;
+     let deletevar=(Object.values(e.target["options"])[1]);
+     let dRoute= ("/coordinate/"+deletevar+"?_method=DELETE");
+     document.getElementById("deleteB").action = dRoute;
+     
+     
 })
 });
          
@@ -189,6 +216,7 @@ fetch(api)
 //console.log(Object.values(marker)//);
        marker.on('mouseover', function (e) {
             this.openPopup();
+            
            
            
         });
