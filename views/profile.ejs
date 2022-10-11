@@ -59,9 +59,7 @@
         const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
         const tiles = L.tileLayer(tileUrl, { attribution });
         tiles.addTo(mymap);
-        //second part of adding markers to layer
-        //mymap.layers=[mymap,marky]
-        // Making a marker with a custom icon
+        
         var greenIcon = L.icon({
           iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
           shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
@@ -72,18 +70,7 @@
           shadowAnchor: [4, 31],  // the same for the shadow
           popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
       });
-      // var redIcon = L.icon({
-      //     iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
-      //     shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
-      
-      //     iconSize:     [38, 40], // size of the icon
-      //     shadowSize:   [50, 30], // size of the shadow
-      //     iconAnchor:   [22, 41], // point of the icon which will correspond to marker's location
-      //     shadowAnchor: [4, 31],  // the same for the shadow
-      //     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-      // });
      
-      //Leaflet another Draw Event
       var marker;
 //add leaving spot marker
 var clicks = 0; // counter 
@@ -94,13 +81,7 @@ var clicks = 0; // counter
              
             
              document.getElementById('theFormId').setAttribute('action', `/coordinate/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
-           
-             
-
-
-
-
-            if (clicks>1&& switchFunction()==false) {
+              if (clicks>1&& switchFunction()==false) {
               mymap.removeLayer(marker); // remove extra marker when leavin spot
               }       //tag username to marker
             const Uname = document.getElementById("userName")
