@@ -122,7 +122,7 @@ fetch(api)
     .then(response => response.json())
     .then(j => {
      
-      console.log(j.display_name)
+     
       document.getElementById("latitude").innerHTML = lat;
      document.getElementById("longitude").innerHTML = lng;   
      document.getElementById("address").innerHTML = j.display_name;   
@@ -188,14 +188,14 @@ fetch(api)
   const { lat, lng } = e.target.getLatLng();
   
  
-//console.log((Object.values(e.target["options"])[1]));
+
   const api = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
  
 fetch(api)
     .then(response => response.json())
     .then(j => {
      
-      console.log(j.display_name)
+      
       document.getElementById("latitude").innerHTML = lat;
      document.getElementById("longitude").innerHTML = lng; 
      document.getElementById("userName").innerHTML = (Object.values(e.target["options"])[1]);  
@@ -213,7 +213,7 @@ fetch(api)
      
 
 
-//console.log(Object.values(marker)//);
+
        marker.on('mouseover', function (e) {
             this.openPopup();
             
