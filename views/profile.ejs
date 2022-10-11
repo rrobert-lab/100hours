@@ -26,8 +26,8 @@
       <!-- map -->
   <div id="issMap"></div>
   <section id="laddress">Address: <section id="address"></section></section>
-  </br>User: <section id="user"></section>
-  </br>UserID: <section id="userID"></section>
+  <section hidden id="user"></br>User: </section>
+  <section hidden id="userID"></br>UserID: </section>
   
   <div id="takeParking" hidden> 
     <div></div>
@@ -88,7 +88,7 @@ var clicks = 0; // counter
             clicks++;//only one marker per user delete last marker using counter
             document.getElementById("latitude").innerHTML = event.latlng.lat;
              document.getElementById("longitude").innerHTML = event.latlng.lng;
-             document.getElementById("user").innerHTML =(Object.values(e.target["options"])[0])
+             //document.getElementById("user").innerHTML =(Object.values(e.target["options"])[0])
              
             
              document.getElementById('theFormId').setAttribute('action', `/coordinate/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
@@ -145,7 +145,7 @@ fetch(api)
     <div hidden>longitude: <span id="longitude"></span></div>
     <section class="right row">
         <div class="col s20 push-s1000">
-            <p><span id="userName" >User Name: user</span></p>
+            <p><span id="userName" hidden>User Name: user</span></p>
             
   <script>
               const myElement = document.getElementById("");
