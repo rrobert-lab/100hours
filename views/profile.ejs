@@ -2,7 +2,7 @@
 <div class="container">
  <!-- FIXED ACTION BUTTON -->
  <div class="fixed-action-btn">
-  <a href="#" class="btn-floating red btn-large"><i class="large material-icons">mode_edit</i></a>
+  <a href="#" class="btn-floating red btn-large"><i class="large material-icons">exit_to_app</i></a>
   <ul>
     <li><p class="right col s6 push-s1">
       <a href="/logout" class="btn-floating btn-large waves-effect waves-light red "> 
@@ -26,6 +26,18 @@
       <!-- map -->
   <div id="issMap"></div>
   <section id="laddress">Address: <section id="address"></section></section>
+  <div id="takeParking" hidden><button  class="clear right waves-effect waves-light btn red" onclick='useWaze()'type="submit">Take Parking</button></div>
+  <script>
+  function useWaze(){
+
+    var lat =document.getElementById("latitude").innerHTML ;
+    var lng= document.getElementById("longitude").innerHTML ;
+    // https://www.waze.com/ul?ll=40.75889500%2C-73.98513100&navigate=yes&zoom=17
+    //window.open("https://www.waze.com/ul?ll=40.75889500%2C-73.98513100&navigate=yes&zoom=17")
+    window.open(`https://www.waze.com/ul?ll=${lat}%2C${lng}&navigate=yes&zoom=17`);
+
+  }
+</script>
   <div class="row mt-5">
 
           <script>
@@ -33,8 +45,7 @@
         function myFunction() {
   alert("Submitted!");
 }
-       
-
+     
         const mymap = L.map('issMap', {
           'center': [40.7279101090076, -73.9925114575458],
           'zoom': 14,
@@ -61,30 +72,35 @@
           shadowAnchor: [4, 31],  // the same for the shadow
           popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
       });
-      var redIcon = L.icon({
-          iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
-          shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+      // var redIcon = L.icon({
+      //     iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
+      //     shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
       
-          iconSize:     [38, 40], // size of the icon
-          shadowSize:   [50, 30], // size of the shadow
-          iconAnchor:   [22, 41], // point of the icon which will correspond to marker's location
-          shadowAnchor: [4, 31],  // the same for the shadow
-          popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-      });
+      //     iconSize:     [38, 40], // size of the icon
+      //     shadowSize:   [50, 30], // size of the shadow
+      //     iconAnchor:   [22, 41], // point of the icon which will correspond to marker's location
+      //     shadowAnchor: [4, 31],  // the same for the shadow
+      //     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+      // });
      
       //Leaflet another Draw Event
       var marker;
 //add leaving spot marker
 var clicks = 0; // counter 
   mymap.on('click', function(event){
-            console.log(clicks++)//only one marker per user delete last marker using counter
+            clicks++;//only one marker per user delete last marker using counter
             document.getElementById("latitude").innerHTML = event.latlng.lat;
              document.getElementById("longitude").innerHTML = event.latlng.lng;
-            //  window.open("https://www.waze.com/ul?ll=40.75889500%2C-73.98513100&navigate=yes&zoom=17");
+             
+            
              document.getElementById('theFormId').setAttribute('action', `/coordinate/${event.latlng.lat}/${event.latlng.lng}?_method=PUT`);
            
+             
 
-            if (clicks>1) {
+
+
+
+            if (clicks>1&& switchFunction()==false) {
               mymap.removeLayer(marker); // remove extra marker when leavin spot
               }       //tag username to marker
             const Uname = document.getElementById("userName")
@@ -100,10 +116,27 @@ var clicks = 0; // counter
                 direction: 'right'
                 
             }).addTo(mymap).on('click', function(e) {
-              //alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-              document.getElementById("latitude").innerHTML = e.latlng.lat;
-              
+ 
             });}})
+
+            mymap.on('click', function(e) {
+  
+  var lat =document.getElementById("latitude").innerHTML ;
+  var lng= document.getElementById("longitude").innerHTML ;
+
+  const api = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+
+fetch(api)
+    .then(response => response.json())
+    .then(j => {
+     
+      console.log(j.display_name)
+      document.getElementById("latitude").innerHTML = lat;
+     document.getElementById("longitude").innerHTML = lng;   
+     document.getElementById("address").innerHTML = j.display_name;   
+})
+});
+            
 </script>
   <!-- end of leaving spot marker  -->
    <!-- switch for leaving and finding spot     -->
@@ -115,8 +148,8 @@ var clicks = 0; // counter
           </div>
 
     </div class="left"><br>
-    <div >latitude: <span id="latitude"></span></div><br>
-    <div>longitude: <span id="longitude"></span></div>
+    <div hidden>latitude: <span id="latitude"></span></div><br>
+    <div hidden>longitude: <span id="longitude"></span></div>
     <section class="right row">
         <div class="col s20 push-s1000">
             <p hidden><span id="userName">User Name: <%= userName %></span></p>
@@ -132,6 +165,8 @@ var clicks = 0; // counter
                   locateOptions: {maxZoom: 16}
                 }
               ).addTo(mymap);
+
+              var markers = new L.FeatureGroup();
 </script>
 <!-- draw  all flags -->
 
@@ -143,32 +178,57 @@ var clicks = 0; // counter
     <li class="col-6 justify-content-between mt-5 " data-id='<%=el._id%>'>
       
        <script>
- 
+        
         var lad= <%= el.lad %>
         var lon= <%= el.lon %>
-        var userName= "<%= el.userName %>"
-        marker = L.marker([ lon,lad], {
-        icon: redIcon 
+        var userName= `<%= el.userName %>`
+        marker = L.marker([ lon,lad,userName])
        
-     })
-     .addTo(mymap)
-     .openPopup()
-     .bindTooltip(userName,
-        {
-            permanent: true,
-            direction: 'right'
-          
-        })
-        .addTo(mymap).on('click', function(el){  $.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${el.lon}&lon=${el.lad}`, 
+           .bindPopup(userName);
+
+        marker.on('click', function(e) {
+  const { lat, lng } = e.target.getLatLng();
+
+  const api = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`;
+
+fetch(api)
+    .then(response => response.json())
+    .then(j => {
+     
+      console.log(j.display_name)
+      document.getElementById("latitude").innerHTML = lat;
+     document.getElementById("longitude").innerHTML = lng;   
+     document.getElementById("address").innerHTML = j.display_name;   
+})
+});
+         
+     
+
+
+//console.log(Object.values(marker)//);
+       marker.on('mouseover', function (e) {
+            this.openPopup();
+           
+           
+        });
         
-        function(data){console.log(data.address.house_number, data.address.road, data.address.city);
-         
-          document.getElementById("address").innerHTML = data.address.house_number+" "+ data.address.road+" "+data.address.city});})
-         
-        </script>
+        marker.on('mouseout', function (e) {
+            this.closePopup();
+           
+        });
+
+        
+        markers.addLayer(marker);
+     
+       
+          </script>
       </li>
     <%})%>
   </ul>
+  
+  <script>
+  
+  </script>
     
   
   <script>
@@ -176,23 +236,22 @@ var clicks = 0; // counter
       function switchFunction(){
       //checkbox value
       var isChecked = document.getElementById('statusValue').checked; 
-      
+      var instruction = document.getElementById('instruction')
       const element = document.getElementById("theFormIda");
       if(document.getElementById('statusValue').checked==true){              
-                    element.classList.add("disabled");
-                  console.log('a')}
-        else{element.classList.remove("disabled");
-        console.log('c');
-        
-        
+                    
+                    document.getElementById("theFormId").hidden = true;
+                    document.getElementById("takeParking").hidden = false;
+                    mymap.addLayer(markers)}
+                  
+        else{document.getElementById("theFormId").hidden = false;
+        document.getElementById("takeParking").hidden = true;
+        mymap.removeLayer(markers);
         
       }
     
     
     return isChecked;}
-    
-    
-    
     
     
     </script>

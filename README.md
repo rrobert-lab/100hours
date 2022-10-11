@@ -1,6 +1,7 @@
 # Install
 
 `npm install`
+`npm install node-fetch`
 
 ---
 
