@@ -1,3 +1,8 @@
+<section>
+  <img src="https://media.giphy.com/media/1wQykuBTRCiA2QP8ut/giphy.gif" width="325" height="200"/>
+</section>
+
+
 # Install
 
 `npm install`
