@@ -16,8 +16,7 @@ module.exports = {
     try {
       // Find post by id
       await Coordinate.findOneAndDelete({ user:req.params.id });
-      console.log('did')
-      // Delete post from db
+      
       
       console.log("Deleted Post");
       res.redirect("/profile");

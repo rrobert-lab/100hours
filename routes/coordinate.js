@@ -13,4 +13,3 @@ router.put("/:lon/:lad", locationController.coordinate);
 module.exports = router;
 
 router.delete("/:id", locationController.deleteCoordinate);
-console.log('at router')

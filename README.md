@@ -25,12 +25,13 @@ leaving a parking spot;
 looking for parking spot;
 -click on one of the existing parking markers
 -click take parking spot
+-WAZE  will open and take you to open parking spot
 
 # why use? the more people that use it, the more effient parking would be. I picture tesla would greatly benefit from an app that shows a car has moved out of its parking spot.
 # Its a map focused on NYC for now. Each user gets one flag. When they leave their parking they click on the find my approxmate location icon on the upper right. Then they double click on the map for the exact location. 
 
 # Things I will add
-
+optional
 `time limit on which a street parking is available`
 `I can incorporate  time expiration of db but then I will not have data`
 https://www.mongodb.com/docs/manual/core/timeseries/timeseries-automatic-removal/
