@@ -1,5 +1,42 @@
 <%- include('partials/header') -%>
 <div class="container">
+
+  <script>
+ 
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+  });
+</script>
+<!-- modal -->
+<button data-target="modal1" class="btn modal-trigger">How to use</button>
+
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <h6 class=""> Use switch to pick if leaving a parking spot or looking for one;</h6>
+    <blockquote>
+      <ul>
+      <li>leaving a parking spot;</li>
+      <li>-click locate my position on map</li>
+      <li>-click on map to put a flag on street you are leaving</li>
+      <li>-click submit</li>
+      <li>looking for parking spot;</li>
+      <li>-click on one of the existing parking markers</li>
+      <li>-click take parking spot</li>
+      <li>-WAZE will open and take you to open parking spot</li>
+    </ul>
+    </blockquote>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat"><h6>Ok!!!</h6></a>
+  </div>
+</div>
+
+
+
+
  <!-- FIXED ACTION BUTTON -->
  <div class="fixed-action-btn">
   <a href="#" class="btn-floating red btn-large"><i class="large material-icons">exit_to_app</i></a>
